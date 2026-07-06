@@ -3,414 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QQ秀 AIO 头像点击拉起半屏实验 · 实验 B 推全申请</title>
+<title>QQ秀互动数据分析 · 2026.04.07–07.05</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-  :root{
-    --bg:#f5f7fb;
-    --bg-soft:#eef2f9;
-    --card:#ffffff;
-    --card-2:#f4f7fc;
-    --line:#e6ebf3;
-    --txt:#1a2233;
-    --txt-soft:#5b6b85;
-    --txt-dim:#9aa7bd;
-    --brand:#4f7cff;
-    --brand-2:#3b66ff;
-    --green:#18a866;
-    --green-soft:#dff5ea;
-    --red:#e5495a;
-    --amber:#d98a16;
-    --grad:linear-gradient(135deg,#4f7cff 0%,#7c5cff 100%);
-    --shadow:0 8px 30px rgba(31,45,75,.08);
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(160deg,#0f1419 0%,#1a2233 100%);
+    color:#e6e9ef; line-height:1.6; padding:32px 20px 80px;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-    background:radial-gradient(1200px 600px at 70% -10%,#e8eeff 0%,var(--bg) 55%);
-    color:var(--txt);
-    line-height:1.7;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:80px;
-  }
-  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .wrap { max-width:1180px; margin:0 auto; }
+  header { text-align:center; margin-bottom:36px; }
+  header h1 { font-size:30px; font-weight:700; letter-spacing:.5px;
+    background:linear-gradient(90deg,#4f9dff,#8b5cff,#ff5fa2);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  header .sub { color:#8b97ab; margin-top:8px; font-size:14px; }
+  .tag { display:inline-block; background:rgba(79,157,255,.15); color:#6db0ff;
+    padding:3px 12px; border-radius:20px; font-size:12px; margin-top:12px; border:1px solid rgba(79,157,255,.3); }
 
-  /* Hero */
-  .hero{padding:64px 0 40px;position:relative}
-  .tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--brand-2);
-    background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.3);
-    padding:6px 14px;border-radius:999px;font-weight:600;letter-spacing:.3px}
-  .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
-  h1{font-size:38px;line-height:1.25;margin:20px 0 14px;font-weight:800;letter-spacing:-.5px}
-  h1 .hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-  .meta{display:flex;flex-wrap:wrap;gap:10px 26px;color:var(--txt-soft);font-size:14px;margin-top:6px}
-  .meta b{color:var(--txt);font-weight:600}
+  .cards { display:flex; gap:16px; margin-bottom:34px; }
+  .cards .card { flex:0 1 380px; }
+  .card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+    border-radius:16px; padding:20px; position:relative; overflow:hidden; }
+  .card::before { content:""; position:absolute; top:0; left:0; width:100%; height:3px;
+    background:linear-gradient(90deg,#4f9dff,#8b5cff); }
+  .card .label { color:#8b97ab; font-size:13px; margin-bottom:8px; }
+  .card .value { font-size:26px; font-weight:700; color:#fff; }
+  .card .sub-metric { font-size:12.5px; color:#9db3d6; margin-top:5px; }
+  .card .delta { font-size:13px; margin-top:6px; }
+  .card .uvpv-row { display:flex; align-items:baseline; gap:8px; margin-top:8px; }
+  .card .uvpv-row .uvpv-k { font-size:12px; color:#8b97ab; width:22px; flex:none; }
+  .card .uvpv-row .uvpv-v { font-size:21px; font-weight:700; color:#fff; }
+  .card .uvpv-row .uvpv-w { font-size:12px; margin-left:auto; white-space:nowrap; }
+  .up { color:#3ddc84; } .down { color:#ff6b6b; }
 
-  /* Conclusion banner */
-  .banner{
-    margin-top:34px;border-radius:18px;padding:26px 28px;position:relative;overflow:hidden;
-    background:linear-gradient(135deg,rgba(79,124,255,.16),rgba(124,92,255,.10));
-    border:1px solid rgba(122,162,255,.28);box-shadow:var(--shadow);
-  }
-  .banner::before{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;
-    background:var(--grad);filter:blur(60px);opacity:.45}
-  .banner h2{font-size:15px;color:var(--brand-2);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase}
-  .banner p{font-size:16.5px;color:var(--txt);position:relative}
-  .banner .verdict{display:inline-block;margin-top:14px;font-weight:800;font-size:18px;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .panel { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
+    border-radius:18px; padding:24px 26px; margin-bottom:26px; }
+  .panel h2 { font-size:18px; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  .panel h2 .dot { width:9px; height:9px; border-radius:50%; background:#4f9dff; }
+  .panel .desc { color:#8b97ab; font-size:13px; margin-bottom:18px; }
+  .chart-box { position:relative; height:340px; }
+  .chart-box.tall { height:380px; }
 
-  /* Section */
-  section{margin-top:54px}
-  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
-  .sec-no{font-size:13px;font-weight:800;color:var(--bg);background:var(--brand-2);
-    width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
-  .sec-head h3{font-size:23px;font-weight:800;letter-spacing:-.3px}
-
-  /* KPI cards */
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 18px;
-    box-shadow:var(--shadow);transition:transform .2s,border-color .2s}
-  .kpi:hover{transform:translateY(-4px);border-color:rgba(122,162,255,.45)}
-  .kpi .label{font-size:13px;color:var(--txt-soft);margin-bottom:8px}
-  .kpi .val{font-size:30px;font-weight:800;letter-spacing:-.5px}
-  .kpi .val.up{color:var(--green)}
-  .kpi .sub{font-size:12.5px;color:var(--txt-dim);margin-top:6px}
-  .kpi .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:10px}
-  .pill.pos{background:var(--green-soft);color:#0f7a48}
-  .pill.flat{background:#fbf0d6;color:#9a6510}
-
-  /* Design cards */
-  .design{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-  .dcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;box-shadow:var(--shadow)}
-  .dcard.b{border-color:rgba(79,124,255,.55);background:linear-gradient(180deg,rgba(79,124,255,.10),var(--card))}
-  .dcard .grp{font-weight:800;font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-  .dcard.b .grp .star{color:var(--amber)}
-  .dcard .flow{color:var(--txt-soft);font-size:14.5px}
-  .dcard .flow em{color:var(--brand-2);font-style:normal;font-weight:600}
-  .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;background:#eef2f9;color:var(--txt-soft)}
-  .badge.rec{background:var(--grad);color:#fff}
-
-  /* Tables */
-  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
-  table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
-  th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line)}
-  th{background:var(--card-2);color:var(--txt-soft);font-weight:600;font-size:13px;white-space:nowrap}
-  tr:last-child td{border-bottom:none}
-  td b{color:var(--txt)}
-  .up{color:var(--green);font-weight:700}
-  .down{color:var(--red);font-weight:700}
-  .flat-t{color:var(--amber);font-weight:600}
-  tr.total td{background:rgba(24,168,102,.08)}
-  tr.total td b{color:#0f7a48}
-
-  /* dimension block */
-  .dim{margin-top:26px}
-  .dim-title{font-size:16px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:9px}
-  .dim-title .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:14px;flex:none;
-    background:rgba(79,124,255,.16);border:1px solid rgba(79,124,255,.3)}
-  .dim-note{color:var(--txt-soft);font-size:13.5px;margin:4px 0 14px;padding-left:35px}
-  .note{background:var(--bg-soft);border-left:3px solid var(--brand);border-radius:0 10px 10px 0;
-    padding:12px 16px;color:var(--txt-soft);font-size:13.5px;margin-top:12px}
-  .note b{color:var(--txt)}
-
-  /* chart */
-  .chart-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:var(--shadow)}
-  .chart-card h4{font-size:15px;margin-bottom:4px}
-  .chart-card .cap{color:var(--txt-dim);font-size:12.5px;margin-bottom:16px}
-  .chart-box{position:relative;height:300px}
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-
-  /* summary */
-  .sum-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-  .srow{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);
-    border-radius:13px;padding:15px 18px;box-shadow:var(--shadow)}
-  .srow .d{font-size:14.5px;color:var(--txt-soft);flex:1}
-  .srow .v{font-size:13.5px;font-weight:700}
-  .srow .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font-size:15px}
-  .ico.pos{background:var(--green-soft);color:#0f7a48}
-  .ico.neu{background:#eef2f9;color:var(--txt-soft)}
-
-  .callout{margin-top:14px;background:linear-gradient(135deg,rgba(24,168,102,.10),rgba(79,124,255,.08));
-    border:1px solid rgba(24,168,102,.3);border-radius:16px;padding:22px 26px;font-size:15.5px}
-  .callout b{color:#0f7a48}
-
-  footer{margin-top:60px;text-align:center;color:var(--txt-dim);font-size:13px;padding-top:24px;border-top:1px solid var(--line)}
-
-  @media(max-width:860px){
-    h1{font-size:28px}
-    .kpis{grid-template-columns:repeat(2,1fr)}
-    .design{grid-template-columns:1fr}
-    .grid-2{grid-template-columns:1fr}
-    .sum-grid{grid-template-columns:1fr}
-  }
+  .insights { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:760px){ .insights{grid-template-columns:1fr;} }
+  .insight { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
+    border-radius:14px; padding:18px 20px; }
+  .insight h3 { font-size:15px; color:#fff; margin-bottom:8px; display:flex; gap:8px; align-items:center;}
+  .insight h3 .ic { font-size:18px; }
+  .insight p { font-size:13.5px; color:#b6bfce; }
+  .insight strong { color:#ffd479; }
+  .highlight-strong { color:#6db0ff; font-weight:600; }
+  footer { text-align:center; color:#5a6577; font-size:12px; margin-top:40px; }
 </style>
 </head>
 <body>
 <div class="wrap">
-
-  <!-- HERO -->
-  <header class="hero">
-    <span class="tag"><span class="dot"></span>实验结论 · 推全申请</span>
-    <h1>QQ秀 AIO 头像点击拉起半屏实验<br><span class="hl">实验 B 推全申请报告</span></h1>
-    <div class="meta">
-      <span>推全方案：<b>对照组 B</b></span>
-      <span>数据口径：<b>实验期累计 15 天</b>（四月 04/15–04/29 ·六月 06/10–06/24 双周期交叉验证）</span>
-      <span>申请人：<b>bonniezhong</b></span>
-      <span>日期：<b>2026-06-25</b></span>
-    </div>
-
-    <div class="banner">
-      <h2>Conclusion · 推全结论</h2>
-      <p>基于 15 天实验数据、四月与六月双周期交叉验证，实验 B 的核心收益（QQ秀互动、形象创建保存、加好友转化率）均达到<b>正向显著且方向一致</b>。六月窄口径下资料卡点赞 / 曝光为<b>负向</b>，属"被直接影响人群"的放大值；而<b>大盘（四月宽口径）资料卡活跃、收入、加好友规模等指标均不显著、无统计损耗</b>。综合判断 B 具备推全条件。</p>
-      <span class="verdict">→ 建议推全实验 B</span>
-    </div>
+  <header>
+    <h1>QQ秀互动数据分析报告</h1>
+    <div class="sub">数据周期：2026.04.07 – 07.05（89 天）｜ 数据主体：bonniezhong</div>
+    <div class="tag">核心结论：6 月起进入爆发式增长通道，近 3 个月互动量翻 3–5 倍</div>
   </header>
 
-  <!-- KPI -->
-  <section>
-    <div class="sec-head"><div class="sec-no">核</div><h3>核心收益速览（15 天 B vs A）</h3></div>
-    <div class="kpis">
-      <div class="kpi">
-        <div class="label">QQ秀点赞 PV</div>
-        <div class="val up">+102%<span style="font-size:15px;color:var(--txt-dim)"> / +134%</span></div>
-        <div class="sub">六月 / 四月</div>
-        <span class="pill pos">两周期正向显著</span>
-      </div>
-      <div class="kpi">
-        <div class="label">QQ秀点赞 UV</div>
-        <div class="val up">+67%<span style="font-size:15px;color:var(--txt-dim)"> / +88%</span></div>
-        <div class="sub">六月 / 四月</div>
-        <span class="pill pos">两周期正向显著</span>
-      </div>
-      <div class="kpi">
-        <div class="label">形象创建新用户 DAU</div>
-        <div class="val up">+9.3%<span style="font-size:15px;color:var(--txt-dim)"> / +7.4%</span></div>
-        <div class="sub">六月 / 四月</div>
-        <span class="pill pos">两周期正向显著</span>
-      </div>
-      <div class="kpi">
-        <div class="label">资料卡加好友率</div>
-        <div class="val up">+1.24%</div>
-        <div class="sub">六月（转化质量↑）</div>
-        <span class="pill pos">正向显著</span>
-      </div>
+  <!-- 概览卡片 -->
+  <div class="cards" id="cards"></div>
+
+  <!-- 图1 关键词 & DAU -->
+  <div class="panel">
+    <h2><span class="dot"></span>整体规模：关键词次数 vs 用户数 / DAU</h2>
+    <div class="desc">左轴为「关键词次数」，右轴为「关键词用户数（虚线）」与「互动写操作 DAU」。次数增速快于人数 → 单人贡献更多关键词。</div>
+    <div class="chart-box tall"><canvas id="chart1"></canvas></div>
+  </div>
+
+  <!-- 图2 动作次数 -->
+  <div class="panel">
+    <h2><span class="dot" style="background:#ff5fa2"></span>QQ秀动作：次数 vs 用户数</h2>
+    <div class="desc">左轴动作次数、右轴动作用户数（虚线）。6/10 用户数见顶（21.6万）后回落，而次数在 7 月重新抬升 → 使用向<strong>重度用户</strong>集中。</div>
+    <div class="chart-box"><canvas id="chart2"></canvas></div>
+  </div>
+
+  <!-- 图3 拍一拍 -->
+  <div class="panel">
+    <h2><span class="dot" style="background:#3ddc84"></span>拍一拍：次数 vs 用户数</h2>
+    <div class="desc">左轴次数、右轴用户数（虚线）。次数与人数走势高度同步，说明是<strong>普惠型</strong>轻互动，人人都在用。</div>
+    <div class="chart-box"><canvas id="chart3"></canvas></div>
+  </div>
+
+  <!-- 图4 人均 -->
+  <div class="panel">
+    <h2><span class="dot" style="background:#ffd479"></span>人均QQ秀动作次数：全程稳定在 4–6 次</h2>
+    <div class="desc">人均强度基本不变 → 增长主要由<span class="highlight-strong">用户规模扩张</span>驱动，而非单用户使用加深。</div>
+    <div class="chart-box"><canvas id="chart4"></canvas></div>
+  </div>
+
+  <!-- 洞察 -->
+  <div class="panel">
+    <h2><span class="dot" style="background:#8b5cff"></span>关键洞察</h2>
+    <div class="desc" style="margin-bottom:16px">从趋势中提炼的 6 条结论</div>
+    <div class="insights">
+      <div class="insight"><h3><span class="ic">🚀</span>全面爆发式增长</h3>
+        <p>近 7 天 vs 首 7 天：关键词次数 <strong>×4.3</strong>、DAU <strong>×3.3</strong>、动作次数 <strong>×3.2</strong>、拍一拍 <strong>×3.1</strong>。四大指标全面翻番，属健康的全盘增长。</p></div>
+      <div class="insight"><h3><span class="ic">📈</span>6 月是关键转折</h3>
+        <p>6/6 起加速，<strong>6/9 出现质变</strong>：动作次数从 30 万单日暴涨至 75 万。强烈提示此时有<span class="highlight-strong">重大功能上线 / 版本发布 / 推广活动</span>，建议复盘归因。</p></div>
+      <div class="insight"><h3><span class="ic">🎯</span>动作次数：尖峰后企稳</h3>
+        <p>6/9–6/14 单日冲到 <strong>100 万+</strong>（峰值 6/13 达 110 万），之后回落到 30–50 万稳态。典型"尝鲜高峰 → 常态化"曲线，需关注留存转化。</p></div>
+      <div class="insight"><h3><span class="ic">📅</span>强周末效应</h3>
+        <p>每周五~周日各指标显著高于工作日（周末峰值常为工作日 1.5–2 倍），符合社交娱乐场景规律，可据此安排运营节奏与资源投放。</p></div>
+      <div class="insight"><h3><span class="ic">⚖️</span>增长靠拉新而非加深</h3>
+        <p>人均动作次数全程稳定在 <strong>4–6 次</strong>，未随大盘上涨。说明增量来自<span class="highlight-strong">新用户涌入</span>，下一步重点应转向<span class="highlight-strong">单用户使用深度</span>与留存。</p></div>
+      <div class="insight"><h3><span class="ic">🔍</span>关键词 > 动作 增速</h3>
+        <p>关键词次数增速（×4.3）明显快于动作次数（×3.2），"轻互动"渗透更广。可考虑把关键词流量向更重的动作/加入行为做<span class="highlight-strong">漏斗引导</span>。</p></div>
+      <div class="insight"><h3><span class="ic">👥</span>次数与人数背离：重度化</h3>
+        <p>动作<strong>用户数</strong>在 6/10 见顶（21.6万）后一路回落到近期 <strong>8万上下</strong>，但动作<strong>次数</strong>在 7 月反而回升至 40万+。说明尝鲜人群退去后，剩下的是<span class="highlight-strong">高频重度用户</span>——盘子的"质"在沉淀，需重点做这批人的留存与拉回。</p></div>
     </div>
-  </section>
+  </div>
 
-  <!-- DESIGN -->
-  <section>
-    <div class="sec-head"><div class="sec-no">一</div><h3>实验设计回顾</h3></div>
-    <div class="design">
-      <div class="dcard">
-        <div class="grp">A <span class="badge">对照（基准）</span></div>
-        <div class="flow">点击<em>圆形头像</em> → <b>直接进资料卡</b>，全程不弹半屏。<br><span style="color:var(--txt-dim);font-size:12.5px">＝现网线上方案，作为所有指标的对比基准。</span></div>
-      </div>
-      <div class="dcard b">
-        <div class="grp"><span class="star">★</span> B <span class="badge rec">推全方案</span></div>
-        <div class="flow">点击 <em>QQ秀形象</em> → 先弹<em>形象展示半屏</em> → 点「查看主页」→ 进资料卡。<br><span style="color:var(--txt-dim);font-size:12.5px"><b>全量用户、每次</b>点 QQ秀形象都弹半屏，多一步形象展示。本次申请推全的方案。</span></div>
-      </div>
-    </div>
-
-    <div style="margin-top:18px" class="tbl-wrap">
-      <table>
-        <thead><tr><th>周期</th><th>分流时机</th><th>口径含义</th></tr></thead>
-        <tbody>
-          <tr><td><b>四月</b></td><td>点击头像（圆形头像 + QQ秀形象）</td><td><b>宽口径 ≈ 大盘真实影响</b></td></tr>
-          <tr><td><b>六月</b></td><td>点击 QQ秀形象</td><td><b>窄口径 = 被直接影响人群的放大值</b></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="note">⚠️ 六月资料卡曝光的下降，相当一部分是「用户本就只想看 QQ秀、并不想进资料卡」——属于<b>满足真实需求</b>，而非纯损失。大盘真实影响应以<b>四月为主、六月做上限参考</b>。</div>
-  </section>
-
-  <!-- CORE DATA -->
-  <section>
-    <div class="sec-head"><div class="sec-no">二</div><h3>核心数据结论（15 天，B vs A）</h3></div>
-
-    <div class="chart-card">
-      <h4>正向显著指标 · 双周期提升幅度</h4>
-      <div class="cap">跨四月 / 六月两个周期方向一致，核心收益稳定显著</div>
-      <div class="chart-box"><canvas id="upliftChart"></canvas></div>
-    </div>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>指标</th><th>六月 15 天 A→B</th><th>四月 15 天 A→B</th><th>判定</th></tr></thead>
-        <tbody>
-          <tr><td>QQ秀点赞 <b>PV</b></td><td>139,314→281,633 <span class="up">+102.16%</span></td><td>3,948→9,255 <span class="up">+134.42%</span></td><td><b>两周期正向显著</b></td></tr>
-          <tr><td>QQ秀点赞 <b>UV</b></td><td>61,667→103,089 <span class="up">+67.17%</span></td><td>2,460→4,619 <span class="up">+87.76%</span></td><td><b>两周期正向显著</b></td></tr>
-          <tr><td>当天<b>创建</b>形象新用户 DAU</td><td>122,546→133,886 <span class="up">+9.25%</span></td><td>10,354→11,120 <span class="up">+7.40%</span></td><td><b>两周期正向显著</b></td></tr>
-          <tr><td>当天<b>保存</b>形象新用户 DAU</td><td>117,398→123,125 <span class="up">+4.88%</span></td><td>6,548→7,117 <span class="up">+8.69%</span></td><td><b>两周期正向显著</b></td></tr>
-          <tr><td>资料卡渠道<b>加好友率</b></td><td>27.5%→27.84% <span class="up">+1.24%</span></td><td>未采集</td><td>六月正向显著</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Dim 1 -->
-    <div class="dim">
-      <div class="dim-title"><span class="ic">📊</span>维度一 · 对资料卡活跃的影响</div>
-      <div class="dim-note">六月资料卡点赞<b style="color:var(--red)">负向</b>、四月不显著，叠加 QQ秀点赞后<b style="color:var(--green)">总活跃净增</b></div>
-      <div class="grid-2">
-        <div class="chart-card" style="margin-bottom:0">
-          <h4>六月点赞总活跃（UV）</h4>
-          <div class="cap">资料卡点赞流失被 QQ秀点赞增量完全覆盖并净增</div>
-          <div class="chart-box"><canvas id="likeChart"></canvas></div>
-        </div>
-        <div class="tbl-wrap" style="align-self:start">
-          <table style="min-width:auto">
-            <thead><tr><th>点赞类型（UV）</th><th>六月 A</th><th>六月 B</th><th>绝对Δ</th></tr></thead>
-            <tbody>
-              <tr><td>资料卡点赞</td><td>818,574</td><td>804,677</td><td><span class="down">-13,897<br>(-1.70%)</span></td></tr>
-              <tr><td>QQ秀点赞</td><td>61,667</td><td>103,089</td><td><span class="up">+41,422<br>(+67.17%)</span></td></tr>
-              <tr class="total"><td><b>点赞总活跃</b></td><td><b>880,241</b></td><td><b>907,766</b></td><td><b class="up">+27,525<br>(+3.13%)</b></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="note">四月（宽口径=大盘）：资料卡点赞 -0.17%（不显著）、QQ秀点赞 +87.76%，总活跃 +0.13%。<br><b>结论：六月（窄口径）资料卡点赞负向 -1.70%，属"被直接影响人群"的放大值；大盘（四月）资料卡点赞不显著、无损耗。两周期资料卡点赞流失均被 QQ秀点赞增量完全覆盖，社交点赞总盘净增。</b></div>
-    </div>
-
-    <!-- Dim 2 -->
-    <div class="dim">
-      <div class="dim-title"><span class="ic">💰</span>维度二 · 对资料卡收入的影响</div>
-      <div class="dim-note">各项降幅置信区间均含 0 → <b style="color:var(--amber)">不显著</b></div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>指标</th><th>六月 15 天 A→B</th><th>四月 15 天 A→B</th><th>判定</th></tr></thead>
-          <tbody>
-            <tr><td>装扮入口个性化付费金额</td><td>18,418→17,233 -6.44%（CI±7.75%）</td><td>8,783→8,080 -8.01%（CI±14.65%）</td><td>置信区间含0，<b class="flat-t">不显著</b></td></tr>
-            <tr><td>礼物入口礼物付费金额</td><td>134→123 -8.21%（CI±90%）</td><td>58→157.8 +172%（CI±222%）</td><td>样本极小双向乱跳，<b class="flat-t">不显著</b></td></tr>
-            <tr><td>礼物入口点击人数</td><td>-2.20%</td><td>+0.22%</td><td class="flat-t">不显著</td></tr>
-            <tr><td>装扮入口点击人数</td><td>-4.39%</td><td>+0.21%</td><td class="flat-t">不显著</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note"><b>结论：收入维度无显著损失（均不显著）。</b></div>
-    </div>
-
-    <!-- Dim 3 -->
-    <div class="dim">
-      <div class="dim-title"><span class="ic">🤝</span>维度三 · 对加好友的影响</div>
-      <div class="dim-note">加好友量不显著，<b style="color:var(--green)">转化率正向显著</b>；六月资料卡曝光负向（窄口径）</div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>指标</th><th>六月 15 天 A→B</th><th>判定</th></tr></thead>
-          <tbody>
-            <tr><td>资料卡渠道加好友 UV<br><span style="color:var(--txt-dim);font-size:12px;font-weight:400">经资料卡这条渠道发起加好友的去重人数</span></td><td>1,043,822→1,034,591 <span class="down">-0.88%</span></td><td><b class="flat-t">不显著（量无损）</b></td></tr>
-            <tr><td>资料卡渠道加好友率<br><span style="color:var(--txt-dim);font-size:12px;font-weight:400">加好友 UV ÷ 资料卡曝光 UV，衡量转化质量</span></td><td>27.5%→27.84% <span class="up">+1.24%</span></td><td><b class="up">正向显著</b></td></tr>
-            <tr><td>主态资料卡曝光 UV<br><span style="color:var(--txt-dim);font-size:12px;font-weight:400">用户查看「自己」资料卡的去重人数</span></td><td><span class="down">-2.16%</span></td><td class="down">六月负向（窄口径）</td></tr>
-            <tr><td>客态资料卡曝光 UV<br><span style="color:var(--txt-dim);font-size:12px;font-weight:400">用户查看「他人」资料卡的去重人数</span></td><td><span class="down">-2.05%</span></td><td class="down">六月负向（窄口径）</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note"><b>结论：加好友绝对量不显著（无损）、转化率正向显著 +1.24%；六月资料卡曝光负向 -2.1%，因多了一步半屏 + 部分用户本就只想看 QQ秀（窄口径放大值），大盘以四月为准影响更小。</b></div>
-    </div>
-
-    <!-- North star -->
-    <div class="dim">
-      <div class="dim-title"><span class="ic">🧭</span>北极星指标</div>
-      <div class="note" style="border-left-color:var(--green)">智能机前台登录用户数：六月 -0.32% / 四月 +0.05% → <b>不显著，大盘无损。</b></div>
-    </div>
-  </section>
-
-  <!-- SUMMARY -->
-  <section>
-    <div class="sec-head"><div class="sec-no">三</div><h3>综合结论</h3></div>
-    <div class="sum-grid">
-      <div class="srow"><div class="ico pos">↗</div><div class="d">QQ秀互动（核心收益）</div><div class="v up">正向显著 · 点赞 PV 六月+102% / 四月+134%</div></div>
-      <div class="srow"><div class="ico pos">↗</div><div class="d">形象创建（新用户 DAU）</div><div class="v up">正向显著 · 六月+9.3% / 四月+7.4%</div></div>
-      <div class="srow"><div class="ico pos">↗</div><div class="d">资料卡加好友率（转化质量）</div><div class="v up">正向显著 · 六月+1.24%</div></div>
-      <div class="srow"><div class="ico neu">≈</div><div class="d">资料卡点赞活跃</div><div class="v"><span class="down">六月-1.70%</span> / 四月不显著 · <span class="up">叠加 QQ秀点赞总活跃 +3.13% 净增</span></div></div>
-      <div class="srow"><div class="ico neu">↘</div><div class="d">资料卡曝光（主态/客态）</div><div class="v down">六月负向 -2.16% / -2.05%（窄口径）· 大盘以四月为准影响更小</div></div>
-      <div class="srow"><div class="ico neu">=</div><div class="d">资料卡收入</div><div class="v flat-t">六月 / 四月均不显著（无损）</div></div>
-      <div class="srow"><div class="ico neu">=</div><div class="d">加好友量（绝对量）</div><div class="v flat-t">六月-0.88% 不显著（无损）</div></div>
-      <div class="srow"><div class="ico neu">=</div><div class="d">北极星 · 智能机前台登录</div><div class="v flat-t">六月-0.32% / 四月+0.05% 不显著（无损）</div></div>
-      <div class="srow"><div class="ico pos">★</div><div class="d">双周期交叉验证</div><div class="v up">四月 / 六月方向一致</div></div>
-    </div>
-  </section>
-
-  <!-- RECOMMENDATION -->
-  <section>
-    <div class="sec-head"><div class="sec-no">四</div><h3>推全建议</h3></div>
-    <div class="callout">
-      综合「核心收益正向显著（QQ秀互动翻倍级、形象创建保存两位数增长、加好友转化率提升）+ 大盘指标全部不显著、无统计损耗 + 双周期交叉验证方向一致」，<b>建议推全实验 B（全量）</b>，并保留 <b>5% 反转桶（A）</b>持续监控装扮付费的长期表现。
-    </div>
-  </section>
-
-  <!-- GLOSSARY -->
-  <section>
-    <div class="sec-head"><div class="sec-no">注</div><h3>指标口径与名词说明</h3></div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>名词</th><th>含义</th></tr></thead>
-        <tbody>
-          <tr><td><b>PV</b>（Page View）</td><td>访问 / 行为次数，同一人多次触发会重复计数。如「QQ秀点赞 PV」= 点赞动作的总次数。</td></tr>
-          <tr><td><b>UV</b>（Unique Visitor）</td><td>去重人数，同一人多次触发只算 1 个。如「QQ秀点赞 UV」= 发生过点赞的人数。</td></tr>
-          <tr><td><b>DAU</b>（Daily Active Users）</td><td>日活跃用户数。「形象创建新用户 DAU」= 当天创建形象的新用户人数。</td></tr>
-          <tr><td><b>CI</b>（Confidence Interval）</td><td>置信区间。区间若<b>包含 0</b>，说明涨跌可能只是随机波动 → 判定为<b>不显著</b>；区间不含 0 才算<b>显著</b>。</td></tr>
-          <tr><td><b>主态资料卡</b></td><td>用户查看<b>自己</b>的资料卡（主态曝光 = 自己看自己的次数 / 人数）。</td></tr>
-          <tr><td><b>客态资料卡</b></td><td>用户查看<b>他人</b>的资料卡（客态曝光 = 看别人 / 被别人看的次数 / 人数）。</td></tr>
-          <tr><td><b>宽口径（四月）</b></td><td>分流发生在「点击头像」这一步，覆盖圆形头像 + QQ秀形象全部用户 → 接近<b>大盘真实影响</b>。</td></tr>
-          <tr><td><b>窄口径（六月）</b></td><td>分流只发生在「点击 QQ秀形象」这一步，仅统计被半屏直接影响的人群 → 是影响的<b>放大值 / 上限</b>，并非大盘真实损耗。</td></tr>
-          <tr><td><b>总活跃净增</b></td><td>资料卡点赞 + QQ秀点赞合计的去重活跃。六月 880,241 → 907,766，<b>净增 +27,525（+3.13%）</b>，即资料卡点赞的小幅流失被 QQ秀点赞增量完全覆盖并超出。</td></tr>
-          <tr><td><b>显著 / 不显著</b></td><td>「显著」= 统计上可确认的真实差异；「不显著」= 涨跌在误差范围内，<b>不能认定为损失或收益</b>，可视为无影响。</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <footer>QQ秀 AIO 头像点击拉起半屏实验 · 实验 B 推全申请 · 2026-06-25</footer>
+  <footer>由 CodeBuddy 生成 · 数据仅用于内部趋势分析</footer>
 </div>
 
 <script>
-  const fontColor = '#5b6b85';
-  const gridColor = 'rgba(31,45,75,.07)';
-  Chart.defaults.color = fontColor;
-  Chart.defaults.font.family = '-apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+const labels = ["04-07","04-08","04-09","04-10","04-11","04-12","04-13","04-14","04-15","04-16","04-17","04-18","04-19","04-20","04-21","04-22","04-23","04-24","04-25","04-26","04-27","04-28","04-29","04-30","05-01","05-02","05-03","05-04","05-05","05-06","05-07","05-08","05-09","05-10","05-11","05-12","05-13","05-14","05-15","05-16","05-17","05-18","05-19","05-20","05-21","05-22","05-23","05-24","05-25","05-26","05-27","05-28","05-29","05-30","05-31","06-01","06-02","06-03","06-04","06-05","06-06","06-07","06-08","06-09","06-10","06-11","06-12","06-13","06-14","06-15","06-16","06-17","06-18","06-19","06-20","06-21","06-22","06-23","06-24","06-25","06-26","06-27","06-28","06-29","06-30","07-01","07-02","07-03","07-04","07-05"];
+const keyword = [756888,709245,697793,874868,1307950,1205909,700953,675509,684091,737172,949431,1406787,1329716,802377,749164,744782,748047,923507,1365885,1253095,747935,746940,793689,1093764,1521834,1507364,1498831,1520669,1374056,792681,742051,737747,950800,1249855,767825,745399,747009,759411,957230,1480660,1395787,820423,807689,862872,817995,1011872,1451633,1373406,834715,798640,814749,819437,991383,1458189,1374946,892812,784213,779162,801911,1033634,1494258,1487326,1240726,1780653,2077898,2039608,2188432,2843568,2801537,2147794,2081276,2112129,2489505,3195292,3207166,3103907,2576572,2840011,3068949,3213628,3433144,4067025,4019215,3355371,3496689,3724673,3849468,4120098,4356161,4269412];
+const dau = [265943,252892,251609,318141,421370,391348,253476,247261,250472,268271,344502,449811,421409,280265,264454,264904,267469,341075,442290,407278,267317,266748,284287,392174,486194,467416,455879,452453,427370,278214,265052,266554,347091,414619,276073,269216,270440,275578,355938,490138,459711,295875,290122,306882,295828,371259,483720,453604,299888,290373,295468,299352,372296,488036,458532,320228,289602,287204,296148,381618,508922,500503,439770,627072,710986,716337,807063,998357,977937,766064,748331,754738,898181,1079641,1053434,1029874,839363,846630,860774,873843,963662,1101548,1066957,886774,912727,958595,986779,1076726,1115797,1076208];
+const action = [90859,88902,81051,94339,175017,185319,108461,80213,92778,86450,110279,170216,173220,91356,87678,73800,82833,92205,205445,178816,81864,84811,94868,109616,175123,200972,183376,210354,159501,83943,80983,81079,102508,154831,97453,85857,86569,96689,170326,239911,227716,116484,108187,113374,106220,120569,199093,191295,104744,96294,97760,101052,106098,201642,179592,99093,83634,61439,59774,66075,214258,227168,307923,755424,1095306,944794,820205,1103124,999558,643719,525890,496819,498219,719041,739698,648864,412184,359283,347465,332719,343823,472873,536912,331122,348493,344291,370601,390123,414620,431033];
+const pat = [290275,266727,255101,271343,335445,324527,242103,242028,237849,231124,249043,314544,304210,230980,221119,216640,213408,227695,284033,278880,212062,212850,218581,252677,309886,317879,328883,326464,308258,224633,214124,211720,249315,280384,219572,214019,211891,211361,258139,303978,298361,224513,223664,229472,219099,241884,311970,295216,243063,238498,219211,220708,265398,295917,293693,229591,213760,215628,220656,255607,307157,317731,317138,488603,644658,714613,781465,881937,934394,844354,834363,851191,936279,1068449,1066400,1012746,893142,897017,874201,878593,859858,942603,931684,852125,848270,851646,859006,881334,923424,907989];
+const perCapita = [4.7,5.0,4.8,5.1,6.6,7.4,6.8,5.3,6.0,5.5,6.3,6.7,7.1,5.5,5.8,5.1,5.1,4.2,6.6,6.1,4.3,4.5,4.7,4.6,5.3,5.9,5.6,6.4,5.3,4.2,4.3,4.1,4.2,5.0,4.7,4.3,4.3,4.7,6.7,5.7,5.7,4.7,4.4,4.4,4.5,4.5,5.3,5.4,4.5,4.3,4.4,4.4,4.4,5.9,5.3,4.2,4.0,3.8,3.7,3.6,5.9,5.3,4.9,4.8,5.1,4.7,4.5,5.5,5.4,4.4,4.1,4.3,4.2,5.0,5.6,5.2,4.4,4.1,4.2,4.2,4.3,5.0,5.7,4.6,4.8,4.6,4.9,4.9,5.0,5.4];
 
-  // Uplift grouped bar
-  new Chart(document.getElementById('upliftChart'), {
-    type:'bar',
-    data:{
-      labels:['QQ秀点赞PV','QQ秀点赞UV','形象创建DAU','形象保存DAU'],
-      datasets:[
-        {label:'六月',data:[102.16,67.17,9.25,4.88],backgroundColor:'#4f7cff',borderRadius:6,maxBarThickness:46},
-        {label:'四月',data:[134.42,87.76,7.40,8.69],backgroundColor:'#7c5cff',borderRadius:6,maxBarThickness:46}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:18}},
-        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: +${c.parsed.y}%`}}},
-      scales:{
-        y:{grid:{color:gridColor},ticks:{callback:v=>'+'+v+'%'},title:{display:true,text:'相对提升 (%)',color:fontColor}},
-        x:{grid:{display:false}}
-      }
-    }
-  });
+// —— 各互动对应的「用户数（人数）」 ——
+const keywordUser = [252940,240500,239398,304131,398262,369716,241036,234833,237793,254725,328303,424330,398128,265726,250898,251675,254250,325327,417446,384475,254046,253187,269006,372930,457596,438832,428899,426084,403104,262859,250097,250962,326585,385775,259017,252653,253800,258479,332172,447332,421560,274555,269877,286954,275861,347238,446550,419767,280357,271573,276336,280029,349269,452066,424964,299681,267938,266068,274046,355491,459732,445915,376260,490972,552069,568608,656021,805422,798692,644616,637725,648418,780135,920561,905193,880428,731960,744705,763553,780316,864183,976010,945377,797596,825677,868831,896379,980644,1014072,979779];
+const patUser = [121064,114517,108399,114377,131811,127267,101899,98859,97962,97709,106381,125299,120833,95683,92812,90807,89355,97139,115884,111529,89751,88754,91224,108133,125558,124931,125156,124588,118158,91797,89200,88267,99981,110877,90891,88833,88526,88410,99302,121087,117266,92795,91632,94669,91212,100762,118039,116519,92685,91268,91549,90915,99509,118902,116302,95869,89479,90428,92531,105189,123029,124691,123928,175365,211948,223642,239371,266691,273807,255709,253494,257367,282765,311021,306677,299124,265476,265210,265658,266040,269914,288790,283215,258221,259770,265038,266333,276166,284894,280316];
+const actionUser = [19131,17641,16974,18541,26422,25094,15942,15256,15364,15668,17424,25423,24315,16500,15167,14500,16313,21977,31062,29437,18884,18989,20281,23637,33175,33965,32835,32975,30167,19792,18925,19706,24204,30811,20766,20061,20297,20558,25358,42417,40042,25016,24521,25498,23809,26782,37304,35573,23097,22322,22343,22851,24197,34384,33646,23612,21132,16368,16052,18167,36590,43145,62304,155993,216499,199282,182159,199037,184832,147095,127503,116710,118466,143307,133065,125518,93969,87640,83067,79939,80677,95168,93950,72315,72025,74733,76046,78848,82812,79326];
 
-  // Like stacked / total
-  new Chart(document.getElementById('likeChart'), {
-    type:'bar',
-    data:{
-      labels:['对照组 A','实验组 B'],
-      datasets:[
-        {label:'资料卡点赞 UV',data:[818574,804677],backgroundColor:'#b9c6e0',borderRadius:{topLeft:0,topRight:0},stack:'s'},
-        {label:'QQ秀点赞 UV',data:[61667,103089],backgroundColor:'#18a866',borderRadius:6,stack:'s'}
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{usePointStyle:true,pointStyle:'circle',padding:16}},
-        tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toLocaleString()}`,
-          footer:items=>{let t=items.reduce((s,i)=>s+i.parsed.y,0);return '总活跃: '+t.toLocaleString()}}}},
-      scales:{
-        y:{stacked:true,grid:{color:gridColor},ticks:{callback:v=>(v/10000)+'万'}},
-        x:{stacked:true,grid:{display:false}}
-      }
-    }
-  });
+// 概览卡片
+const fmt = n => n>=10000 ? (n/10000).toFixed(1)+"万" : n;
+const avg = (arr,s,e)=>arr.slice(s,e).reduce((a,b)=>a+b,0)/(e-s);
+const last7 = a => avg(a, a.length-7, a.length);
+const prev7 = a => avg(a, a.length-14, a.length-7);
+const first7 = a => avg(a, 0, 7);
+
+// 互动写操作 PV = 关键词 + 动作 + 拍一拍 三类互动次数逐日加总；UV = 互动写操作 DAU
+const pv = keyword.map((k,i)=>k+action[i]+pat[i]);
+const uv = dau;
+// 周同比：近 7 日均 vs 前 7 日均
+const wowVal = a => (last7(a)/prev7(a)-1)*100;
+const wowTag = a => { const v=wowVal(a); const up=v>=0;
+  return `<span class="${up?'up':'down'}">${up?'▲ +':'▼ '}${v.toFixed(1)}%</span>`; };
+
+const cardsData = [
+  {uvpv:true, label:"互动写操作 UV / PV（周同比）"},
+];
+document.getElementById("cards").innerHTML = cardsData.map(c=>{
+  if(c.uvpv){
+    return `<div class="card"><div class="label">${c.label}</div>
+      <div class="uvpv-row"><span class="uvpv-k">UV</span><span class="uvpv-v">${fmt(Math.round(last7(uv)))}</span><span class="uvpv-w">${wowTag(uv)} 周同比</span></div>
+      <div class="uvpv-row"><span class="uvpv-k">PV</span><span class="uvpv-v">${fmt(Math.round(last7(pv)))}</span><span class="uvpv-w">${wowTag(pv)} 周同比</span></div>
+      <div class="sub-metric">PV = 关键词+动作+拍一拍 次数加总</div></div>`;
+  }
+  return `<div class="card"><div class="label">${c.label}</div>
+  <div class="value">${c.value}</div>
+  <div class="sub-metric">👥 ${c.sub}</div>
+  <div class="delta ${c.up?'up':'down'}">▲ ${c.delta}</div></div>`;
+}).join("");
+
+Chart.defaults.color = "#8b97ab";
+Chart.defaults.font.family = "-apple-system,PingFang SC,sans-serif";
+const grid = { color:"rgba(255,255,255,.06)" };
+const baseX = { grid, ticks:{ maxTicksLimit:15, autoSkip:true } };
+const legendCfg = { labels:{ usePointStyle:true, boxWidth:8, padding:16 } };
+
+function grad(ctx, c1, c2){
+  const g = ctx.createLinearGradient(0,0,0,340);
+  g.addColorStop(0,c1); g.addColorStop(1,c2); return g;
+}
+
+new Chart(document.getElementById("chart1"), {
+  type:"line",
+  data:{ labels, datasets:[
+    {label:"关键词次数", data:keyword, borderColor:"#4f9dff", backgroundColor:"rgba(79,157,255,.12)", fill:true, tension:.3, pointRadius:0, borderWidth:2, yAxisID:"y"},
+    {label:"关键词用户数", data:keywordUser, borderColor:"#6be3ff", backgroundColor:"transparent", borderDash:[5,4], fill:false, tension:.3, pointRadius:0, borderWidth:2, yAxisID:"y1"},
+    {label:"互动写操作 DAU", data:dau, borderColor:"#ff5fa2", backgroundColor:"rgba(255,95,162,.06)", fill:true, tension:.3, pointRadius:0, borderWidth:2, yAxisID:"y1"},
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:"index",intersect:false},
+    plugins:{ legend:legendCfg },
+    scales:{ x:baseX,
+      y:{ position:"left", grid, title:{display:true,text:"关键词次数"} },
+      y1:{ position:"right", grid:{drawOnChartArea:false}, title:{display:true,text:"用户数 / DAU"} } } }
+});
+
+new Chart(document.getElementById("chart2"), {
+  type:"line",
+  data:{ labels, datasets:[
+    {label:"QQ秀动作次数", data:action, borderColor:"#ff5fa2", backgroundColor:"rgba(255,95,162,.15)", fill:true, tension:.3, pointRadius:0, borderWidth:2, yAxisID:"y"},
+    {label:"QQ秀动作用户数", data:actionUser, borderColor:"#ffb84f", backgroundColor:"transparent", borderDash:[5,4], fill:false, tension:.3, pointRadius:0, borderWidth:2, yAxisID:"y1"},
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:"index",intersect:false}, plugins:{legend:legendCfg},
+    scales:{ x:baseX,
+      y:{ position:"left", grid, title:{display:true,text:"动作次数"} },
+      y1:{ position:"right", grid:{drawOnChartArea:false}, title:{display:true,text:"动作用户数"} } } }
+});
+
+new Chart(document.getElementById("chart3"), {
+  type:"line",
+  data:{ labels, datasets:[
+    {label:"QQ秀拍一拍次数", data:pat, borderColor:"#3ddc84", backgroundColor:"rgba(61,220,132,.15)", fill:true, tension:.3, pointRadius:0, borderWidth:2, yAxisID:"y"},
+    {label:"QQ秀拍一拍用户数", data:patUser, borderColor:"#b6ff8f", backgroundColor:"transparent", borderDash:[5,4], fill:false, tension:.3, pointRadius:0, borderWidth:2, yAxisID:"y1"},
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:"index",intersect:false}, plugins:{legend:legendCfg},
+    scales:{ x:baseX,
+      y:{ position:"left", grid, title:{display:true,text:"拍一拍次数"} },
+      y1:{ position:"right", grid:{drawOnChartArea:false}, title:{display:true,text:"拍一拍用户数"} } } }
+});
+
+new Chart(document.getElementById("chart4"), {
+  type:"line",
+  data:{ labels, datasets:[
+    {label:"人均QQ秀动作次数", data:perCapita, borderColor:"#ffd479", backgroundColor:"rgba(255,212,121,.12)", fill:true, tension:.3, pointRadius:0, borderWidth:2},
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:legendCfg}, scales:{x:baseX,y:{grid, suggestedMin:3, suggestedMax:8}} }
+});
 </script>
 </body>
 </html>
