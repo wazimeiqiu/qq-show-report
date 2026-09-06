@@ -121,6 +121,20 @@ h4 { margin: 18px 0 8px; color: #34445f; font-size: 14px; }
 .speech-note p { margin: 0; font-size: 14px; line-height: 1.8; }
 .survey-speech { margin: 4px 0 15px; border-color: #bfe7d0; background: linear-gradient(135deg, #f1fbf5 0%, #fbfffc 100%); }
 .survey-speech .speech-label { background: var(--green); }
+.industry-disclaimer { margin: 11px 0 0; padding: 9px 11px; border-left: 3px solid #8aa9ff; border-radius: 0 8px 8px 0; background: #f5f8ff; color: #5c6e90; font-size: 12px; line-height: 1.65; }
+.depth-block { margin: 15px 0; padding: 17px; border: 1px solid #d8d0ff; border-radius: 13px; background: linear-gradient(135deg, #faf8ff 0%, #f5f8ff 100%); color: #4a526e; }
+.depth-title { margin-bottom: 8px; color: #5946a8; font-size: 14px; font-weight: 800; }
+.depth-block > p { margin: 0; line-height: 1.85; }
+.insight-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.insight-grid > div { padding: 11px; border: 1px solid #e1dcf8; border-radius: 9px; background: rgba(255, 255, 255, .72); }
+.insight-grid b { display: block; margin-bottom: 4px; color: #5d48a6; font-size: 12px; }
+.insight-grid span { color: #596179; font-size: 13px; line-height: 1.7; }
+.counter-note { margin-top: 11px; padding: 10px 11px; border-radius: 9px; background: #fff8e8; color: #725923; font-size: 13px; line-height: 1.7; }
+.survey-depth { margin: 4px 0 14px; padding: 14px; border: 1px solid #c9e6d3; border-radius: 11px; background: linear-gradient(135deg, #f3fbf6 0%, #fbfffc 100%); color: #4d6260; }
+.survey-depth > b { display: block; margin-bottom: 5px; color: #24744d; font-size: 13px; }
+.survey-depth p { margin: 0; line-height: 1.8; }
+.survey-depth ul { margin: 9px 0 0; padding-left: 18px; }
+.survey-depth li { margin: 5px 0; font-size: 13px; line-height: 1.7; }
 
 .table-wrap { overflow-x: auto; margin: 14px 0; border: 1px solid var(--line); border-radius: 12px; }
 table { width: 100%; min-width: 630px; border-collapse: collapse; background: #fff; font-size: 13px; }
@@ -185,7 +199,7 @@ ul.clean li, ol.clean li { margin: 6px 0; }
   .section { padding: 21px 16px; border-radius: 16px; }
   .section-top { display: block; }
   .private-label { display: inline-flex; margin-top: 10px; }
-  .grid-2, .grid-3, .dual-panel { grid-template-columns: 1fr; }
+  .grid-2, .grid-3, .dual-panel, .insight-grid { grid-template-columns: 1fr; }
   .view-panel + .view-panel { border-top: 1px solid var(--line); border-left: 0; }
   .qa-head { align-items: start; }
   .qa-question { font-size: 15px; }
